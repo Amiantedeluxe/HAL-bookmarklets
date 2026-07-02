@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outils HAL — Bookmarklets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2b3a;
+    --paper:#f4f1e8;
+    --card:#fffdf7;
+    --brass:#a9791f;
+    --brass-dark:#7d5a15;
+    --teal:#2d5951;
+    --line:#d8d0bd;
+    --shadow:0 1px 0 rgba(28,43,58,.06);
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans', system-ui, sans-serif;
+    --serif:'Newsreader', Georgia, serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,43,58,.05) 1px, transparent 0);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+  }
+  a{color:inherit;}
+
+  /* ---------- HERO / BOOKMARKS BAR ---------- */
+  header.hero{
+    padding:64px 24px 0;
+    max-width:920px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brass-dark);
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    line-height:1.08;
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--teal);
+  }
+  .lede{
+    font-size:17px;
+    max-width:56ch;
+    color:#3b4a58;
+    margin:0 0 40px;
+  }
+
+  .browser-chrome{
+    max-width:920px;
+    margin:0 auto 72px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 18px 40px -20px rgba(28,43,58,.35);
+    background:#fff;
+  }
+  .browser-top{
+    background:linear-gradient(#e9e4d5,#ddd6c2);
+    padding:9px 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .dot{width:10px;height:10px;border-radius:50%;background:#cabf9f;}
+  .browser-address{
+    flex:1;
+    margin-left:8px;
+    background:#f9f7f0;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:5px 12px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:#8a8168;
+  }
+  .bookmarks-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    padding:10px 14px;
+    background:#fdfcf7;
+    border-bottom:1px solid var(--line);
+  }
+  .bookmarks-bar .hint{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:#8a8168;
+    margin-right:4px;
+  }
+  .bm-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:6px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink);
+    text-decoration:none;
+    cursor:grab;
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .bm-chip:hover{
+    border-color:var(--brass);
+    box-shadow:0 4px 10px -4px rgba(169,121,31,.5);
+    transform:translateY(-1px);
+  }
+  .bm-chip:active{cursor:grabbing;}
+  .bm-chip .ico{font-size:13px;}
+
+  .browser-page{
+    padding:34px 28px 30px;
+    text-align:center;
+    color:#9b927a;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  .browser-page svg{display:block;margin:0 auto 10px;opacity:.55;}
+
+  /* ---------- INSTRUCTIONS STRIP ---------- */
+  .howto{
+    max-width:920px;
+    margin:0 auto 56px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .howto div{
+    background:var(--card);
+    padding:18px 20px;
+  }
+  .howto .num{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--brass);
+    font-size:22px;
+    display:block;
+    margin-bottom:4px;
+  }
+  .howto p{margin:0;font-size:13.5px;color:#3b4a58;}
+
+  /* ---------- CARDS ---------- */
+  main{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 100px;
+  }
+  .tool{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:28px;
+    overflow:hidden;
+  }
+  .tool-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    padding:26px 28px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .tool-head h2{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:26px;
+    margin:0 0 8px;
+  }
+  .tool-head .tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+    background:#e4efec;
+    padding:3px 8px;
+    border-radius:4px;
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .tool-head p{
+    margin:0;
+    color:#3b4a58;
+    font-size:14.5px;
+    max-width:52ch;
+  }
+  .install-btn{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--ink);
+    color:#f4f1e8;
+    text-decoration:none;
+    padding:11px 16px;
+    border-radius:7px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    white-space:nowrap;
+    border:1px solid var(--ink);
+    transition:background .15s ease, transform .12s ease;
+    cursor:grab;
+  }
+  .install-btn:hover{background:var(--brass-dark);border-color:var(--brass-dark);transform:translateY(-1px);}
+  .install-btn:active{cursor:grabbing;}
+
+  .tool-body{padding:20px 28px 26px;}
+  .code-wrap{
+    position:relative;
+    background:#11202a;
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .code-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 14px;
+    background:#0d1922;
+    border-bottom:1px solid #1c2f3b;
+  }
+  .code-bar span{
+    font-family:var(--mono);
+    font-size:11px;
+    color:#7a9a97;
+    letter-spacing:.06em;
+  }
+  .copy-btn{
+    font-family:var(--mono);
+    font-size:11.5px;
+    background:transparent;
+    border:1px solid #2b4753;
+    color:#cfe3df;
+    padding:5px 10px;
+    border-radius:5px;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .copy-btn:hover{background:#1c2f3b;border-color:var(--brass);}
+  .copy-btn.copied{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  pre{
+    margin:0;
+    padding:18px 20px;
+    overflow-x:auto;
+    max-height:340px;
+    overflow-y:auto;
+  }
+  code{
+    font-family:var(--mono);
+    font-size:12.5px;
+    line-height:1.6;
+    color:#dce8e6;
+    white-space:pre;
+  }
+  pre::-webkit-scrollbar{height:8px;width:8px;}
+  pre::-webkit-scrollbar-thumb{background:#2b4753;border-radius:4px;}
+
+  footer{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 24px 60px;
+    font-size:13px;
+    color:#8a8168;
+    font-family:var(--mono);
+  }
+  footer a{color:var(--teal);text-decoration:underline;text-underline-offset:2px;}
+
+  @media (max-width:640px){
+    .howto{grid-template-columns:1fr;}
+    .tool-head{flex-direction:column;}
+    .install-btn{align-self:flex-start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="eyebrow">Boîte à outils — paris1.hal.science</p>
+  <h1>Quatre bookmarklets pour <em>fiabiliser</em> vos notices HAL.</h1>
+  <p class="lede">Détection de doublons, identification d'auteur·rice·s, inspection JSON et vérification de collection — directement dans le navigateur, sans rien installer. Glissez un bloc dans votre barre de favoris, cliquez dessus sur une page HAL.</p>
+</header>
+
+<div class="browser-chrome">
+  <div class="browser-top">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="browser-address">hal.science/hal-0…</div>
+  </div>
+  <div class="bookmarks-bar">
+    <span class="hint">★ Favoris —</span>
+    <a class="bm-chip" id="bar-duplicate" draggable="true"><span class="ico">🧭</span>Doublons HAL</a>
+    <a class="bm-chip" id="bar-idcatcher" draggable="true"><span class="ico">🪪</span>Id_Catcher</a>
+    <a class="bm-chip" id="bar-jsonifier" draggable="true"><span class="ico">{ }</span>Jsonifier</a>
+    <a class="bm-chip" id="bar-collcheck" draggable="true"><span class="ico">☑</span>CollCheck</a>
+  </div>
+  <div class="browser-page">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 9h18"/></svg>
+    glissez un des blocs ci-dessus dans votre propre barre de favoris pour l'installer
+  </div>
+</div>
+
+<div class="howto">
+  <div><span class="num">01</span><p>Affichez votre barre de favoris (<code style="font-family:var(--mono)">Ctrl/Cmd + Maj + B</code>).</p></div>
+  <div><span class="num">02</span><p>Glissez-déposez le bouton noir d'un outil dans la barre — ou copiez le code minifié dans un nouveau favori.</p></div>
+  <div><span class="num">03</span><p>Rendez-vous sur une notice, une page auteur ou une collection HAL, puis cliquez sur le favori.</p></div>
+</div>
+
+<main>
+
+  <!-- DUPLICATE -->
+  <section class="tool" id="duplicate">
+    <div class="tool-head">
+      <div>
+        <span class="tag">Notice</span>
+        <h2>Détecteur de doublons</h2>
+        <p>Depuis une page de notice ou de modération HAL, interroge l'API pour repérer les notices au DOI ou au titre proche — avec liens directs vers les doublons potentiels.</p>
+      </div>
+      <a class="install-btn" id="install-duplicate" draggable="true">↗ Glisser pour installer</a>
+    </div>
+    <div class="tool-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span>Duplicate.js — version lisible</span><button class="copy-btn" data-copy-target="code-duplicate">Copier</button></div>
+        <pre><code id="code-duplicate"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ID_CATCHER -->
+  <section class="tool" id="idcatcher">
+    <div class="tool-head">
+      <div>
+        <span class="tag">Auteur</span>
+        <h2>Id_Catcher</h2>
+        <p>Sur une page auteur AuréHAL, retrouve automatiquement le prénom et le nom, puis croise IdRef et ORCID pour proposer les identifiants et affiliations correspondants, copiables en un clic.</p>
+      </div>
+      <a class="install-btn" id="install-idcatcher" draggable="true">↗ Glisser pour installer</a>
+    </div>
+    <div class="tool-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span>Id_Catcher.js — version lisible</span><button class="copy-btn" data-copy-target="code-idcatcher">Copier</button></div>
+        <pre><code id="code-idcatcher"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- JSONIFIER -->
+  <section class="tool" id="jsonifier">
+    <div class="tool-head">
+      <div>
+        <span class="tag">Notice</span>
+        <h2>Jsonifier</h2>
+        <p>Ouvre dans un nouvel onglet la réponse JSON complète de l'API HAL pour la notice affichée — utile pour inspecter tous les champs sans repasser par une requête manuelle.</p>
+      </div>
+      <a class="install-btn" id="install-jsonifier" draggable="true">↗ Glisser pour installer</a>
+    </div>
+    <div class="tool-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span>Jsonifier.js — version lisible</span><button class="copy-btn" data-copy-target="code-jsonifier">Copier</button></div>
+        <pre><code id="code-jsonifier"></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLCHECK -->
+  <section class="tool" id="collcheck">
+    <div class="tool-head">
+      <div>
+        <span class="tag">Collection</span>
+        <h2>CollCheck</h2>
+        <p>Sur une liste de dépôts, saisissez un code de collection : l'outil interroge l'API par lots et surligne directement dans le tableau les documents déjà présents dans la collection.</p>
+      </div>
+      <a class="install-btn" id="install-collcheck" draggable="true">↗ Glisser pour installer</a>
+    </div>
+    <div class="tool-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span>CollCheck.js — version lisible</span><button class="copy-btn" data-copy-target="code-collcheck">Copier</button></div>
+        <pre><code id="code-collcheck"></code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Outils internes pour la gestion du dépôt institutionnel HAL de Paris 1 Panthéon-Sorbonne. Code source sur <a href="https://github.com/Amiantedeluxe/HAL-bookmarklets" target="_blank" rel="noopener">GitHub</a>.
+</footer>
+
+<script id="data" type="application/json">
+{"duplicate_full": "(function() {\n  function c(m) {\n    let d = document.createElement('div');\n    d.style.position = 'fixed';\n    d.style.top = '20px';\n    d.style.right = '20px';\n    d.style.backgroundColor = 'white';\n    d.style.border = '2px solid #444';\n    d.style.padding = '10px';\n    d.style.zIndex = 9999;\n    d.style.maxHeight = '70%';\n    d.style.overflowY = 'auto';\n    d.style.width = '400px';\n    d.innerHTML = m;\n    let b = document.createElement('button');\n    b.textContent = 'Fermer';\n    b.onclick = () => d.remove();\n    d.appendChild(b);\n    document.body.appendChild(d);\n  }\n\n  function getHalIdFromMeta() {\n  let metas = document.querySelectorAll('meta[name=\"DC.identifier\"]');\n  for (let meta of metas) {\n    let content = meta.getAttribute('content');\n    if (content && content.match(/^hal[a-z]*-\\d+/)) {\n      return content;\n    }\n  }\n  return null;\n}\n\n\n  let p = window.location.pathname.split('/');\n  let h, docid, u;\n\n  // Détection du type d'URL\n  if (p.includes('moderate') && p.includes('docid')) {\n    // URL de modération\n    let idx = p.indexOf('docid');\n    if (idx !== -1 && p[idx + 1]) {\n      docid = p[idx + 1];\n      u = `https://api.archives-ouvertes.fr/crac/hal/?q=docid:${docid}&fl=halId_s,title_s,doiId_s&wt=json`;\n    }\n  } else {\n    // URL classique - accepte tous les types d'identifiants HAL\n    h = p[p.length - 1];\n    if (h) {\n      u = `https://api.archives-ouvertes.fr/search/?q=halId_s:\"${h}\"&fl=halId_s,title_s,doiId_s&wt=json`;\n    }\n  }\n\n  if (!u) {\n    c(\"<b>URL non reconnue</b>\");\n    return;\n  }\n\n  let h_base = h ? h.replace(/v\\d+$/, '') : '';\n\n  fetch(u)\n    .then(r => r.json())\n    .then(d => {\n      function tryDoc(doc) {\n        if (!doc) {\n          c(\"<b>Aucune notice HAL trouvée. </b>\");\n          return;\n        }\n\n        let halId = doc.halId_s || '';\n        if (!h_base) h_base = halId.replace(/v\\d+$/, '');\n\n        let titles = Array.isArray(doc.title_s) ? doc.title_s : [doc.title_s || \"\"];\n        let doi = Array.isArray(doc.doiId_s) ? doc.doiId_s[0] : doc.doiId_s || \"\";\n\n        let qParts = [];\n        if (doi) qParts.push(`doiId_s:\"${doi}\"`);\n\n        // Ajouter une partie de requête pour CHAQUE titre\n        titles.forEach(t => {\n          if (t) {\n            let mots = t.replace(/[()\":!?,;'-]/g, \"\").split(/\\s+/).slice(0, 12).join(\" \");\n            if (mots) qParts.push(`title_t:(${mots})`);\n          }\n        });\n        let q = qParts.join(\" OR \");\n        \n        let s = `https://api.archives-ouvertes.fr/search/?q=${encodeURIComponent(q)}&fl=halId_s,title_s,doiId_s&wt=json&rows=50`;\n\n        fetch(s)\n          .then(r2 => r2.json())\n          .then(r => {\n            if (!r.response || !r.response.docs) {\n              c(\"<b>Erreur lors de la recherche de doublons. </b>\");\n              return;\n            }\n\n            let res = r.response.docs.filter(x => {\n              let xid = (x.halId_s || \"\").replace(/v\\d+$/, '');\n              let xdoi = Array.isArray(x.doiId_s) ? x.doiId_s[0] : x.doiId_s || \"\";\n              if (xid === h_base) return false;\n              if (doi && xdoi) return xdoi === doi;\n              return true;\n            });\n\n            if (res.length === 0) {\n              c(\"<b>Pas de doublon détecté</b>\");\n              return;\n            }\n\n            let content = \"<b>Doublons potentiels :</b><ul>\";\n            res.forEach(x => {\n              let id = x.halId_s;\n              let title = Array.isArray(x.title_s) ? x.title_s[0] : x.title_s || \"\";\n              let xd = Array.isArray(x.doiId_s) ? x.doiId_s[0] : x.doiId_s || \"\";\n              let url = \"https://hal.science/\" + id;\n              content += `<li><a href=\"${url}\" target=\"_blank\">${id}</a> | ${title} | ${xd ? 'DOI: ' + xd : ''}</li>`;\n            });\n            content += \"</ul>\";\n            c(content);\n          })\n          .catch(e => c(\"Erreur recherche doublons : \" + e));\n      }\n\n// Traitement de la réponse\n      if (d && d.response && d.response.docs && d.response.docs.length) {\n        tryDoc(d.response.docs[0]);\n      } else if (h_base !== h) {\n        // Fallback seulement si h avait une version (v1, v2, etc.)\n        let u2 = `https://api.archives-ouvertes.fr/search/?q=halId_s:\"${h_base}\"&fl=halId_s,title_s,doiId_s&wt=json`;\n        fetch(u2)\n          .then(r3 => r3.json())\n          .then(d2 => {\n            if (d2 && d2.response && d2.response.docs && d2.response.docs.length) {\n              tryDoc(d2.response.docs[0]);\n            } else {\n              // Si toujours rien, essayer avec meta tags\n              let metaHalId = getHalIdFromMeta();\n              if (metaHalId && metaHalId !== h && metaHalId !== h_base) {\n                let u3 = `https://api.archives-ouvertes.fr/search/?q=halId_s:\"${metaHalId}\"&fl=halId_s,title_s,doiId_s&wt=json`;\n                h_base = metaHalId.replace(/v\\d+$/, '');\n                fetch(u3)\n                  .then(r4 => r4.json())\n                  .then(d3 => {\n                    if (d3 && d3.response && d3.response.docs && d3.response.docs.length) {\n                      tryDoc(d3.response.docs[0]);\n                    } else {\n                      c(\"<b>Aucune notice HAL trouvée.</b>\");\n                    }\n                  })\n                  .catch(e => c(\"Erreur notice HAL (meta fallback) : \" + e));\n              } else {\n                c(\"<b>Aucune notice HAL trouvée.</b>\");\n              }\n            }\n          })\n          .catch(e => c(\"Erreur notice HAL (fallback) : \" + e));\n      } else {\n        // Essayer avec meta tags (cas fusion/redirection)\n        let metaHalId = getHalIdFromMeta();\n        if (metaHalId && metaHalId !== h) {\n          let u3 = `https://api.archives-ouvertes.fr/search/?q=halId_s:\"${metaHalId}\"&fl=halId_s,title_s,doiId_s&wt=json`;\n          h_base = metaHalId.replace(/v\\d+$/, '');\n          fetch(u3)\n            .then(r4 => r4.json())\n            .then(d3 => {\n              if (d3 && d3.response && d3.response.docs && d3.response.docs.length) {\n                tryDoc(d3.response.docs[0]);\n              } else {\n                c(\"<b>Aucune notice HAL trouvée.</b>\");\n              }\n            })\n            .catch(e => c(\"Erreur notice HAL (meta fallback) : \" + e));\n        } else {\n          c(\"<b>Aucune notice HAL trouvée </b>\");\n        }\n      }\n    })\n    .catch(e => c(\"Erreur notice HAL : \" + e));\n})();", "duplicate_mini": "javascript:(function(){function c(m){let d=document.createElement('div');d.style.position='fixed';d.style.top='20px';d.style.right='20px';d.style.backgroundColor='white';d.style.border='2px solid #444';d.style.padding='10px';d.style.zIndex=9999;d.style.maxHeight='70%';d.style.overflowY='auto';d.style.width='400px';d.innerHTML=m;let b=document.createElement('button');b.textContent='Fermer';b.onclick=()=>d.remove();d.appendChild(b);document.body.appendChild(d)}function getHalIdFromMeta(){let metas=document.querySelectorAll('meta[name=\"DC.identifier\"]');for(let meta of metas){let content=meta.getAttribute('content');if(content&&content.match(/^hal[a-z]*-\\d+/))return content}return null}let p=window.location.pathname.split('/');let h,docid,u;if(p.includes('moderate')&&p.includes('docid')){let idx=p.indexOf('docid');if(idx!==-1&&p[idx+1]){docid=p[idx+1];u=%60https://api.archives-ouvertes.fr/crac/hal/?q=docid:${docid}&fl=halId_s,title_s,doiId_s&wt=json%60}}else{h=p[p.length-1];if(h){u=%60https://api.archives-ouvertes.fr/search/?q=halId_s:\"${h}\"&fl=halId_s,title_s,doiId_s&wt=json%60}}if(!u){c(\"<b>URL non reconnue</b>\");return}let h_base=h?h.replace(/v\\d+$/,''):'';fetch(u).then(r=>r.json()).then(d=>{function tryDoc(doc){if(!doc){c(\"<b>Aucune notice HAL trouvée. </b>\");return}let halId=doc.halId_s||'';if(!h_base)h_base=halId.replace(/v\\d+$/,'');let titles=Array.isArray(doc.title_s)?doc.title_s:[doc.title_s||\"\"];let doi=Array.isArray(doc.doiId_s)?doc.doiId_s[0]:doc.doiId_s||\"\";let qParts=[];if(doi)qParts.push(%60doiId_s:\"${doi}\"%60);titles.forEach(t=>{if(t){let mots=t.replace(/[()\":!?,;'-]/g,\"\").split(/\\s+/).slice(0,12).join(\" \");if(mots)qParts.push(%60title_t:(${mots})%60)}});let q=qParts.join(\" OR \");let s=%60https://api.archives-ouvertes.fr/search/?q=${encodeURIComponent(q)}&fl=halId_s,title_s,doiId_s&wt=json&rows=50%60;fetch(s).then(r2=>r2.json()).then(r=>{if(!r.response||!r.response.docs){c(\"<b>Erreur lors de la recherche de doublons. </b>\");return}let res=r.response.docs.filter(x=>{let xid=(x.halId_s||\"\").replace(/v\\d+$/,'');let xdoi=Array.isArray(x.doiId_s)?x.doiId_s[0]:x.doiId_s||\"\";if(xid===h_base)return false;if(doi&&xdoi)return xdoi===doi;return true});if(res.length===0){c(\"<b>Pas de doublon détecté </b>\");return}let content=\"<b>Doublons potentiels :</b><ul>\";res.forEach(x=>{let id=x.halId_s;let title=Array.isArray(x.title_s)?x.title_s[0]:x.title_s||\"\";let xd=Array.isArray(x.doiId_s)?x.doiId_s[0]:x.doiId_s||\"\";let url=\"https://hal.science/\"+id;content+=%60<li><a href=\"${url}\" target=\"_blank\">${id}</a> | ${title} | ${xd?'DOI: '+xd:''}</li>%60});content+=\"</ul>\";c(content)}).catch(e=>c(\"Erreur recherche doublons : \"+e))}if(d&&d.response&&d.response.docs&&d.response.docs.length){tryDoc(d.response.docs[0])}else if(h_base!==h){let u2=%60https://api.archives-ouvertes.fr/search/?q=halId_s:\"${h_base}\"&fl=halId_s,title_s,doiId_s&wt=json%60;fetch(u2).then(r3=>r3.json()).then(d2=>{if(d2&&d2.response&&d2.response.docs&&d2.response.docs.length){tryDoc(d2.response.docs[0])}else{let metaHalId=getHalIdFromMeta();if(metaHalId&&metaHalId!==h&&metaHalId!==h_base){let u3=%60https://api.archives-ouvertes.fr/search/?q=halId_s:\"${metaHalId}\"&fl=halId_s,title_s,doiId_s&wt=json%60;h_base=metaHalId.replace(/v\\d+$/,'');fetch(u3).then(r4=>r4.json()).then(d3=>{if(d3&&d3.response&&d3.response.docs&&d3.response.docs.length){tryDoc(d3.response.docs[0])}else{c(\"<b>Aucune notice HAL trouvée.</b>\")}}).catch(e=>c(\"Erreur notice HAL (meta fallback) : \"+e))}else{c(\"<b>Aucune notice HAL trouvée.</b>\")}}}).catch(e=>c(\"Erreur notice HAL (fallback) : \"+e))}else{let metaHalId=getHalIdFromMeta();if(metaHalId&&metaHalId!==h){let u3=%60https://api.archives-ouvertes.fr/search/?q=halId_s:\"${metaHalId}\"&fl=halId_s,title_s,doiId_s&wt=json%60;h_base=metaHalId.replace(/v\\d+$/,'');fetch(u3).then(r4=>r4.json()).then(d3=>{if(d3&&d3.response&&d3.response.docs&&d3.response.docs.length){tryDoc(d3.response.docs[0])}else{c(\"<b>Aucune notice HAL trouvée.</b>\")}}).catch(e=>c(\"Erreur notice HAL (meta fallback) : \"+e))}else{c(\"<b>Aucune notice HAL trouvée </b>\")}}}).catch(e=>c(\"Erreur notice HAL : \"+e))})();", "idcatcher_full": "javascript:(async () => {\n\n    // Helpers sécurité\n    function escapeHtml(s) {\n        if (s == null) return '';\n        return String(s)\n            .replace(/&/g, '&amp;').replace(/</g, '&lt;')\n            .replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;');\n    }\n    function escapeAttr(s) { return escapeHtml(s); }\n    function stripAccents(s) {\n        return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n    }\n\n    // Popup unique avec délégation pour les boutons de copie\n    function createPopup(html) {\n        let prev = document.getElementById('hal-idcatcher-popup');\n        if (prev) prev.remove();\n        let d = document.createElement('div');\n        d.id = 'hal-idcatcher-popup';\n        d.style.cssText = 'position:fixed;top:20px;right:20px;background:white;border:2px solid #444;padding:10px;z-index:99999;max-height:70%;overflow-y:auto;width:520px;font-family:sans-serif;';\n        d.innerHTML = html;\n        let b = document.createElement('button');\n        b.textContent = 'Fermer';\n        b.style.marginTop = '10px';\n        b.onclick = () => d.remove();\n        d.appendChild(b);\n        d.addEventListener('click', (ev) => {\n            const btn = ev.target.closest('button[data-copy]');\n            if (!btn) return;\n            const t = btn.getAttribute('data-copy');\n            navigator.clipboard?.writeText(t).then(() => {\n                const old = btn.textContent;\n                btn.textContent = '✓';\n                setTimeout(() => btn.textContent = old, 1000);\n            });\n        });\n        document.body.appendChild(d);\n    }\n\n    try {\n        // Extraction de l'ID auteur depuis l'URL\n        let idAur = window.location.pathname.replace(/^\\/|\\/$/g, '').split('/').pop() || '';\n        if (!idAur) { createPopup('<b>Impossible de déterminer l\\'ID auteur depuis l\\'URL.</b>'); return; }\n\n        let prenom = '', nom = '';\n        \n        const isCreatePage = /\\/create\\//i.test(window.location.pathname);\n\n     \n        // Récupération prénom/nom depuis l'API HAL\n        if (!isCreatePage) {\n            try {\n                let r = await fetch(`https://api.archives-ouvertes.fr/search/?q=authIdPerson_i:${idAur}&fl=authLastName_s,authFirstName_s,authIdPerson_i&rows=50&wt=json`);\n                if (r.ok) {\n                    let data = await r.json();\n                    for (const doc of (data.response?.docs || [])) {\n                        let ids = Array.isArray(doc.authIdPerson_i) ? doc.authIdPerson_i : [doc.authIdPerson_i];\n                        let idx = ids.findIndex(id => String(id) === String(idAur));\n                        if (idx !== -1) {\n                            prenom = (doc.authFirstName_s || [])[idx] || '';\n                            nom    = (doc.authLastName_s  || [])[idx] || '';\n                            break;\n                        }\n                    }\n                }\n            } catch(e) {}\n        }\n        // Fallback DOM si l'API HAL n'a rien retourné\n        if (!prenom && !nom) {\n            let header = document.querySelector('h3.mb-4') ||\n                Array.from(document.querySelectorAll('h3')).find(h =>\n                    /Modifications des informations de/i.test(h.innerText) ||\n                    /Auteur\\s*:/i.test(h.innerText) ||\n                    /Création d'un auteur identifié/i.test(h.innerText)\n                );\n            if (header) {\n                let t = header.innerText.trim();\n                let m = t.match(/Auteur\\s*:\\s*(.+)/i) || t.match(/Modifications des informations de\\s+(.+)/i);\n                if (m) {\n                    let parts = m[1].trim().split(/\\s+/).filter(Boolean);\n                    prenom = parts.shift() || '';\n                    nom = parts.join(' ') || '';\n                }\n                if (!prenom && !nom && /Création d'un auteur identifié/i.test(t)) {\n                    let li = document.querySelector('#sortable-form li[data-firstname][data-lastname]');\n                    if (li) {\n                        prenom = li.getAttribute('data-firstname') || '';\n                        nom    = li.getAttribute('data-lastname')  || '';\n                    }\n                }\n            }\n        }\n\n        if (!prenom && !nom) { createPopup(\"<b>Impossible de déterminer le nom de l'auteur.</b>\"); return; }\n\n        let nomTrouve = `${prenom} ${nom}`.trim();\n\n        // Construction des requêtes IdRef et ORCID\n        let qUrl = `https://www.idref.fr/Sru/Solr?q=${encodeURIComponent(`persname_t:(${nom} AND ${prenom})`)}&fl=id,ppn_z,affcourt_z,recordtype_z&rows=20&wt=json`;\n        let orcidUrl = `https://pub.orcid.org/v3.0/search/?q=family-name:${encodeURIComponent(stripAccents(nom))}+AND+given-names:${encodeURIComponent(stripAccents(prenom))}&rows=8`;\n\n        // Requêtes parallèles IdRef + ORCID\n        let [r2, r3] = await Promise.allSettled([\n            fetch(qUrl),\n            fetch(orcidUrl, { headers: { 'Accept': 'application/json' } })\n        ]);\n\n        let idrefJson = null;\n        if (r2.status === 'fulfilled' && r2.value.ok) {\n            try { let txt = await r2.value.text(); if (txt.trim().startsWith('{')) idrefJson = JSON.parse(txt); } catch(e) {}\n        }\n        let orcidData = null;\n        if (r3.status === 'fulfilled' && r3.value.ok) {\n            try { orcidData = await r3.value.json(); } catch(e) {}\n        }\n\n        let html = `<div style=\"padding:6px;\"><b>Résultats pour ${escapeHtml(nomTrouve)} :</b>`;\n\n        // === IdRef ===\n        html += `<div style=\"margin-top:10px;\"><h3 style=\"background:#E3F2FD;padding:6px;margin:0;\">📚 IdRef</h3><ul style=\"padding-left:14px;margin-top:8px;\">`;\n\n        let docs = idrefJson?.response?.docs || [];\n        let items = docs.map(x => ({ ppn: x.ppn_z || x.id || '', lib: x.affcourt_z || x.recordtype_z || '' })).filter(it => it.ppn);\n\n        if (items.length) {\n            // Fetch des détails de chaque PPN en parallèle\n            let details = await Promise.allSettled(items.map(it =>\n                fetch(`https://www.idref.fr/${it.ppn}.json`).then(r => r.ok ? r.json() : Promise.reject())\n            ));\n\n            for (let i = 0; i < items.length; i++) {\n                const { ppn, lib } = items[i];\n                let bioHtml = '', orcidHtml = '', halHtml = '';\n                const dr = details[i];\n\n                if (dr.status === 'fulfilled' && Array.isArray(dr.value?.record?.datafield)) {\n                    const fields = dr.value.record.datafield;\n                    const subs = f => Array.isArray(f.subfield) ? f.subfield : [f.subfield];\n                    const sub = (f, code) => subs(f).find(s => String(s.code) === code)?.content;\n\n                    // Biographie (tag 340)\n                    let bioField = fields.find(f => String(f.tag) === '340');\n                    if (bioField) {\n                        let bio = String(sub(bioField, 'a') || '');\n                        if (bio) {\n                            let bioShort = bio.length > 100 ? bio.substring(0, 100) + '...' : bio;\n                            bioHtml = `<div style=\"margin-top:3px;font-size:12px;color:#555;font-style:italic;cursor:help;\" title=\"${escapeAttr(bio)}\">${escapeHtml(bioShort)}</div>`;\n                        }\n                    }\n\n                    // ORCID (tag 035, code 2 = \"ORCID\")\n                    let orcidField = fields.filter(f => String(f.tag) === '035')\n                        .find(f => subs(f).find(s => String(s.code) === '2' && String(s.content).toUpperCase() === 'ORCID'));\n                    if (orcidField) {\n                        let orcid = String(sub(orcidField, 'a') || '');\n                        if (orcid) orcidHtml = `<div style=\"margin-top:3px;\"><b>ORCID :</b> <a href=\"https://orcid.org/${escapeAttr(orcid)}\" target=\"_blank\" rel=\"noopener\">${escapeHtml(orcid)}</a> <button data-copy=\"${escapeAttr(orcid)}\" style=\"border:none;background:#81C784;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>`;\n                       }\n\n                    // ID HAL\n                    let halField = fields.filter(f => String(f.tag) === '035')\n                        .find(f => subs(f).find(s => String(s.code) === '2' && String(s.content).toUpperCase() === 'HAL'));\n                    if (halField) {\n                        let idHal = String(sub(halField, 'a') || '');\n                        if (idHal) halHtml = `<div style=\"margin-top:3px;\"><b>IDHAL :</b> ${escapeHtml(idHal)} <button data-copy=\"${escapeAttr(idHal)}\" style=\"border:none;background:#1565C0;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>`;\n                    }\n\n                    // Affiliations (tag 510)\n                    let affFields = fields.filter(f => String(f.tag) === '510');\n                    if (affFields.length) {\n                        let affList = affFields.map(f => ({\n                            name: String(sub(f, 'a') || ''),\n                            year: (String(sub(f, '0') || '').match(/^(\\d{4})/) || [])[1] || ''\n                        })).filter(a => a.name);\n                        if (affList.length) {\n                            bioHtml += `<div style=\"margin-top:5px;font-size:12px;color:#444;\"><b>Affiliation(s) :</b><br/>`;\n                            for (const aff of affList) {\n                                bioHtml += `<span style=\"margin-left:8px;\">• ${escapeHtml(aff.name)}`;\n                                if (aff.year) bioHtml += ` <i>(depuis ${aff.year})</i>`;\n                                bioHtml += `</span><br/>`;\n                            }\n                            bioHtml += `</div>`;\n                        }\n                    }\n                }\n\n                html += `<li style=\"margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #eee;\">\n                           <a href=\"https://www.idref.fr/${escapeAttr(ppn)}\" target=\"_blank\" rel=\"noopener\"><b>${escapeHtml(lib)}</b></a>\n                           ${bioHtml}\n                           <div style=\"margin-top:4px;\"><b>IDREF :</b> ${escapeHtml(ppn)} <button data-copy=\"${escapeAttr(ppn)}\" style=\"border:none;background:#64B5F6;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button>${orcidHtml}${halHtml}</div>\n                         </li>`;\n            }\n        } else {\n            html += `<li>Aucun résultat</li>`;\n        }\n        html += `</ul></div>`;\n\n        // === ORCID ===\n        html += `<div style=\"margin-top:15px;\"><h3 style=\"background:#E8F5E9;padding:6px;margin:0;\">🔬 ORCID</h3><ul style=\"padding-left:14px;margin-top:8px;\">`;\nlet orcidIds = (orcidData?.result || []).map(item => item['orcid-identifier']?.path).filter(p => p);\nif (orcidIds.length) {\n    let [profiles, employments] = await Promise.all([\n        Promise.allSettled(orcidIds.map(oid =>\n            fetch(`https://pub.orcid.org/v3.0/${oid}/person`, { headers: { 'Accept': 'application/json' } })\n                .then(r => r.ok ? r.json() : null)\n        )),\n        Promise.allSettled(orcidIds.map(oid =>\n            fetch(`https://pub.orcid.org/v3.0/${oid}/employments`, { headers: { 'Accept': 'application/json' } })\n                .then(r => r.ok ? r.json() : null)\n        ))\n    ]);\n\n    for (let i = 0; i < orcidIds.length; i++) {\n        let oid = orcidIds[i];\n        let profile = profiles[i].status === 'fulfilled' ? profiles[i].value : null;\n        let empData = employments[i].status === 'fulfilled' ? employments[i].value : null;\n\n        let displayName = oid;\n        if (profile?.name) {\n            let gn = profile.name['given-names']?.value || '';\n            let fn = profile.name['family-name']?.value || '';\n            displayName = `${gn} ${fn}`.trim() || oid;\n        }\n\n        // Extraire les emplois\n       let currentEmp = (empData?.['affiliation-group'] || [])\n    .flatMap(g => g.summaries?.map(s => s['employment-summary']) || [])\n    .filter(e => e && !e['end-date'])  // pas de date de fin = actuel\n    .map(e => e.organization?.name)\n    .filter(name => name);\n\n        let empHtml = '';\nif (currentEmp.length) {\n    empHtml = `<div style=\"font-size:12px;color:#555;font-style:italic;margin-top:3px;\">${currentEmp.map(n => escapeHtml(n)).join(', ')}</div>`;\n}\n\n        html += `<li style=\"margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #eee;\">\n                   <a href=\"https://orcid.org/${escapeAttr(oid)}\" target=\"_blank\" rel=\"noopener\"><b>${escapeHtml(displayName)}</b></a>\n                   <div style=\"margin-top:3px;color:#666;font-size:13px;\">${escapeHtml(oid)} <button data-copy=\"${escapeAttr(oid)}\" style=\"border:none;background:#81C784;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>\n                   ${empHtml}\n                 </li>`;\n    }\n} else {\n    html += `<li>Aucun résultat</li>`;\n}\n\n        html += `</ul></div></div>`;\n        createPopup(html);\n\n    } catch(e) {\n        createPopup('Erreur : ' + escapeHtml(e?.message || String(e)));\n    }\n})();", "idcatcher_mini": "javascript:(async()=>{function t(t){return null==t?\"\":String(t).replace(/&/g,\"&amp;\").replace(/</g,\"&lt;\").replace(/>/g,\"&gt;\").replace(/\"/g,\"&quot;\").replace(/%27/g,\"&#39;\")}function e(e){return t(e)}function i(t){return String(t||\"\").normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\")}function a(t){let e=document.getElementById(\"hal-idcatcher-popup\");e&&e.remove();let i=document.createElement(\"div\");i.id=\"hal-idcatcher-popup\",i.style.cssText=\"position:fixed;top:20px;right:20px;background:white;border:2px solid #444;padding:10px;z-index:99999;max-height:70%;overflow-y:auto;width:520px;font-family:sans-serif;\",i.innerHTML=t;let a=document.createElement(\"button\");a.textContent=\"Fermer\",a.style.marginTop=\"10px\",a.onclick=()=>i.remove(),i.appendChild(a),i.addEventListener(\"click\",t=>{let e=t.target.closest(\"button[data-copy]\");if(!e)return;let i=e.getAttribute(\"data-copy\");navigator.clipboard?.writeText(i).then(()=>{let t=e.textContent;e.textContent=\"✓\",setTimeout(()=>e.textContent=t,1e3)})}),document.body.appendChild(i)}try{let r=window.location.pathname.replace(/^\\/|\\/$/g,\"\").split(\"/\").pop()||\"\";if(!r){a(\"<b>Impossible de d\\xe9terminer l'ID auteur depuis l'URL.</b>\");return}let l=\"\",n=\"\",o=/\\/create\\//i.test(window.location.pathname);if(!o)try{let p=await fetch(%60https://api.archives-ouvertes.fr/search/?q=authIdPerson_i:${r}&fl=authLastName_s,authFirstName_s,authIdPerson_i&rows=50&wt=json%60);if(p.ok){let s=await p.json();for(let d of s.response?.docs||[]){let u=(Array.isArray(d.authIdPerson_i)?d.authIdPerson_i:[d.authIdPerson_i]).findIndex(t=>String(t)===String(r));if(-1!==u){l=(d.authFirstName_s||[])[u]||\"\",n=(d.authLastName_s||[])[u]||\"\";break}}}}catch(f){}if(!l&&!n){let c=document.querySelector(\"h3.mb-4\")||Array.from(document.querySelectorAll(\"h3\")).find(t=>/Modifications des informations de/i.test(t.innerText)||/Auteur\\s*:/i.test(t.innerText)||/Création d'un auteur identifié/i.test(t.innerText));if(c){let m=c.innerText.trim(),g=m.match(/Auteur\\s*:\\s*(.+)/i)||m.match(/Modifications des informations de\\s+(.+)/i);if(g){let b=g[1].trim().split(/\\s+/).filter(Boolean);l=b.shift()||\"\",n=b.join(\" \")||\"\"}if(!l&&!n&&/Création d'un auteur identifié/i.test(m)){let h=document.querySelector(\"#sortable-form li[data-firstname][data-lastname]\");h&&(l=h.getAttribute(\"data-firstname\")||\"\",n=h.getAttribute(\"data-lastname\")||\"\")}}}if(!l&&!n){a(\"<b>Impossible de d\\xe9terminer le nom de l'auteur.</b>\");return}let x=%60${l} ${n}%60.trim(),y,[v,$]=await Promise.allSettled([fetch(%60https://www.idref.fr/Sru/Solr?q=${encodeURIComponent(%60persname_t:(${n} AND ${l})%60)}&fl=id,ppn_z,affcourt_z,recordtype_z&rows=20&wt=json%60),fetch(%60https://pub.orcid.org/v3.0/search/?q=family-name:${encodeURIComponent(i(n))}+AND+given-names:${encodeURIComponent(i(l))}&rows=8%60,{headers:{Accept:\"application/json\"}})]),w=null;if(\"fulfilled\"===v.status&&v.value.ok)try{let _=await v.value.text();_.trim().startsWith(\"{\")&&(w=JSON.parse(_))}catch(k){}let A=null;if(\"fulfilled\"===$.status&&$.value.ok)try{A=await $.value.json()}catch(z){}let C=%60<div style=\"padding:6px;\"><b>R\\xe9sultats pour ${t(x)} :</b>%60;C+=%60<div style=\"margin-top:10px;\"><h3 style=\"background:#E3F2FD;padding:6px;margin:0;\">📚 IdRef</h3><ul style=\"padding-left:14px;margin-top:8px;\">%60;let I=(w?.response?.docs||[]).map(t=>({ppn:t.ppn_z||t.id||\"\",lib:t.affcourt_z||t.recordtype_z||\"\"})).filter(t=>t.ppn);if(I.length){let j=await Promise.allSettled(I.map(t=>fetch(%60https://www.idref.fr/${t.ppn}.json%60).then(t=>t.ok?t.json():Promise.reject())));for(let D=0;D<I.length;D++){let{ppn:E,lib:F}=I[D],S=\"\",T=\"\",q=\"\",L=j[D];if(\"fulfilled\"===L.status&&Array.isArray(L.value?.record?.datafield)){let N=L.value.record.datafield,R=t=>Array.isArray(t.subfield)?t.subfield:[t.subfield],P=(t,e)=>R(t).find(t=>String(t.code)===e)?.content,M=N.find(t=>\"340\"===String(t.tag));if(M){let H=String(P(M,\"a\")||\"\");H&&(S=%60<div style=\"margin-top:3px;font-size:12px;color:#555;font-style:italic;cursor:help;\" title=\"${e(H)}\">${t(H.length>100?H.substring(0,100)+\"...\":H)}</div>%60)}let O=N.filter(t=>\"035\"===String(t.tag)).find(t=>R(t).find(t=>\"2\"===String(t.code)&&\"ORCID\"===String(t.content).toUpperCase()));if(O){let U=String(P(O,\"a\")||\"\");U&&(T=%60<div style=\"margin-top:3px;\"><b>ORCID :</b> <a href=\"https://orcid.org/${e(U)}\" target=\"_blank\" rel=\"noopener\">${t(U)}</a> <button data-copy=\"${e(U)}\" style=\"border:none;background:#81C784;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>%60)}let B=N.filter(t=>\"035\"===String(t.tag)).find(t=>R(t).find(t=>\"2\"===String(t.code)&&\"HAL\"===String(t.content).toUpperCase()));if(B){let W=String(P(B,\"a\")||\"\");W&&(q=%60<div style=\"margin-top:3px;\"><b>IDHAL :</b> ${t(W)} <button data-copy=\"${e(W)}\" style=\"border:none;background:#1565C0;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>%60)}let G=N.filter(t=>\"510\"===String(t.tag));if(G.length){let J=G.map(t=>({name:String(P(t,\"a\")||\"\"),year:(String(P(t,\"0\")||\"\").match(/^(\\d{4})/)||[])[1]||\"\"})).filter(t=>t.name);if(J.length){for(let K of(S+='<div style=\"margin-top:5px;font-size:12px;color:#444;\"><b>Affiliation(s) :</b><br/>',J))S+=%60<span style=\"margin-left:8px;\">• ${t(K.name)}%60,K.year&&(S+=%60 <i>(depuis ${K.year})</i>%60),S+=\"</span><br/>\";S+=\"</div>\"}}}C+=%60<li style=\"margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #eee;\">                           <a href=\"https://www.idref.fr/${e(E)}\" target=\"_blank\" rel=\"noopener\"><b>${t(F)}</b></a>                           ${S}                           <div style=\"margin-top:4px;\"><b>IDREF :</b> ${t(E)} <button data-copy=\"${e(E)}\" style=\"border:none;background:#64B5F6;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button>${T}${q}</div>                         </li>%60}}else C+=%60<li>Aucun r\\xe9sultat</li>%60;C+=\"</ul></div>\",C+=%60<div style=\"margin-top:15px;\"><h3 style=\"background:#E8F5E9;padding:6px;margin:0;\">🔬 ORCID</h3><ul style=\"padding-left:14px;margin-top:8px;\">%60;let Q=(A?.result||[]).map(t=>t[\"orcid-identifier\"]?.path).filter(t=>t);if(Q.length){let[V,X]=await Promise.all([Promise.allSettled(Q.map(t=>fetch(%60https://pub.orcid.org/v3.0/${t}/person%60,{headers:{Accept:\"application/json\"}}).then(t=>t.ok?t.json():null))),Promise.allSettled(Q.map(t=>fetch(%60https://pub.orcid.org/v3.0/${t}/employments%60,{headers:{Accept:\"application/json\"}}).then(t=>t.ok?t.json():null)))]);for(let Y=0;Y<Q.length;Y++){let Z=Q[Y],tt=\"fulfilled\"===V[Y].status?V[Y].value:null,te=\"fulfilled\"===X[Y].status?X[Y].value:null,ti=Z;if(tt?.name){let ta;ti=%60${tt.name[\"given-names\"]?.value||\"\"} ${tt.name[\"family-name\"]?.value||\"\"}%60.trim()||Z}let tr=(te?.[\"affiliation-group\"]||[]).flatMap(t=>t.summaries?.map(t=>t[\"employment-summary\"])||[]).filter(t=>t&&!t[\"end-date\"]).map(t=>t.organization?.name).filter(t=>t),tl=\"\";tr.length&&(tl=%60<div style=\"font-size:12px;color:#555;font-style:italic;margin-top:3px;\">${tr.map(e=>t(e)).join(\", \")}</div>%60),C+=%60<li style=\"margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #eee;\">                   <a href=\"https://orcid.org/${e(Z)}\" target=\"_blank\" rel=\"noopener\"><b>${t(ti)}</b></a>                   <div style=\"margin-top:3px;color:#666;font-size:13px;\">${t(Z)} <button data-copy=\"${e(Z)}\" style=\"border:none;background:#81C784;color:white;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;margin-left:4px;\">📋</button></div>                   ${tl}                 </li>%60}}else C+=%60<li>Aucun r\\xe9sultat</li>%60;C+=\"</ul></div></div>\",a(C)}catch(tn){a(\"Erreur : \"+t(tn?.message||String(tn)))}})();", "jsonifier_full": "javascript:(function () {\n    function getDocIdFromHTML() {\n        let b = document.querySelector(\"[data-docid]\");\n        if (b) {\n            return b.getAttribute(\"data-docid\");\n        }\n        return null;\n    }\n\n    let docid = getDocIdFromHTML();\n\n    if (!docid) {\n        let p = window.location.pathname.split(\"/\");\n        let h = p[p.length - 1];\n\n        if (!h || h === \"\") {\n            alert(\"Impossible de détecter le halId dans l'URL\");\n            return;\n        }\n\n        docid = h\n            .replace(/^[a-z]+-0*/, \"\")\n            .replace(/v\\d+$/, \"\");\n    }\n\n    let apiUrl = `https://api.archives-ouvertes.fr/search?q=docid:${docid}&fl=*&wt=json`;\n\n    window.open(apiUrl, \"_blank\");\n})();", "jsonifier_mini": "javascript:(function(){function getDocIdFromHTML(){let b=document.querySelector('[data-docid]');if(b)return b.getAttribute('data-docid');return null}let docid=getDocIdFromHTML();if(!docid){let p=window.location.pathname.split('/');let h=p[p.length-1];if(!h||h===''){alert(\"Impossible de détecter le halId dans l'URL\");return}docid=h.replace(/^[a-z]+-0*/,'').replace(/v\\d+$/,'')}let apiUrl=`https://api.archives-ouvertes.fr/search?q=docid:${docid}&fl=*&wt=json`;window.open(apiUrl,%27_blank%27)})();", "collcheck_full": "javascript:(function () {\n    if (document.getElementById(\"_halCollChecker\")) return;\n\n    const e = document.createElement(\"div\");\n    e.id = \"_halCollChecker\";\n    e.style.cssText =\n        \"position:fixed;top:20px;right:20px;z-index:99999;background:#fff;border:1px solid #ccc;border-radius:6px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.2);font:13px sans-serif;min-width:280px\";\n\n    e.innerHTML = `\n        <b>V\\u00e9rificateur de collection HAL</b>\n        <button onclick=\"document.getElementById('_halCollChecker').remove()\"\n                style=\"float:right;border:none;background:none;cursor:pointer;font-size:15px\">\\u2715</button>\n        <br><br>\n        <label>\n            Code collection :\n            <input id=\"_halCollCode\"\n                   type=\"text\"\n                   placeholder=\"ex: UNIV-PARIS1\"\n                   style=\"width:100%;margin-top:4px;padding:4px;box-sizing:border-box\">\n        </label>\n        <br><br>\n        <button id=\"_halCollRun\" style=\"padding:5px 12px;cursor:pointer\">\n            V\\u00e9rifier\n        </button>\n        <span id=\"_halCollStatus\" style=\"margin-left:8px;color:#888\"></span>\n    `;\n\n    document.body.appendChild(e);\n\n    document\n        .getElementById(\"_halCollRun\")\n        .addEventListener(\"click\", async function () {\n            const e = document.getElementById(\"_halCollCode\").value.trim();\n            const t = document.getElementById(\"_halCollStatus\");\n\n            if (!e) {\n                alert(\"Saisis un code de collection.\");\n                return;\n            }\n\n            document\n                .querySelectorAll(\"._halBadge\")\n                .forEach(e => e.remove());\n\n            document\n                .querySelectorAll(\"tr[data-docid]\")\n                .forEach(e => (e.style.background = \"\"));\n\n            const l = document.querySelectorAll(\"tr[data-docid]\");\n\n            if (!l.length) {\n                alert(\n                    \"Aucun document trouv\\u00e9 dans le DOM. Essaie de d\\u00e9plier la liste d'abord.\"\n                );\n                return;\n            }\n\n            const o = [...l].map(e => e.dataset.docid);\n            const r = 80;\n            const d = [];\n\n            for (let e = 0; e < o.length; e += r) {\n                d.push(o.slice(e, e + r));\n            }\n\n            const n = new Set();\n            const s = [];\n\n            for (let a = 0; a < d.length; a++) {\n                const c = d[a];\n\n                t.textContent =\n                    d.length > 1\n                        ? `Lot ${a + 1}/${d.length} (${o.length} docs au total)\\u2026`\n                        : `Interrogation de l'API (${o.length} docs)\\u2026`;\n\n                const i = `collCode_s:${e} AND (docid:${c.join(\n                    \" OR docid:\"\n                )})`;\n\n                const u =\n                    `https://api.archives-ouvertes.fr/search/?q=` +\n                    `${encodeURIComponent(i)}&fl=docid&rows=${c.length}&wt=json`;\n\n                try {\n                    const e = await fetch(u);\n\n                    if (!e.ok) {\n                        s.push(\n                            `Lot ${a + 1} : HTTP ${e.status} ${e.statusText}`\n                        );\n                        continue;\n                    }\n\n                    const t = await e.json();\n\n                    if (\n                        !t ||\n                        !t.response ||\n                        !Array.isArray(t.response.docs)\n                    ) {\n                        s.push(\n                            `Lot ${a + 1} : r\\u00e9ponse JSON inattendue`\n                        );\n                        continue;\n                    }\n\n                    t.response.docs.forEach(e =>\n                        n.add(String(e.docid))\n                    );\n                } catch (e) {\n                    s.push(`Lot ${a + 1} : ${e.message || e}`);\n                }\n            }\n\n            let m = 0;\n\n            l.forEach(t => {\n                const l = t.querySelectorAll(\"td\")[1];\n\n                if (l && n.has(t.dataset.docid)) {\n                    t.style.background = \"#e6f4ea\";\n\n                    const o = document.createElement(\"span\");\n                    o.className = \"_halBadge\";\n                    o.textContent = \"\\u2713 \" + e;\n                    o.style.cssText =\n                        \"display:inline-block;margin-left:6px;padding:1px 6px;background:#2e7d32;color:#fff;border-radius:3px;font-size:11px;vertical-align:middle\";\n\n                    l.appendChild(o);\n                    m++;\n                }\n            });\n\n            let g =\n                `${m} doc${m > 1 ? \"s\" : \"\"} ` +\n                `trouv\\u00e9${m > 1 ? \"s\" : \"\"} sur ${o.length}.`;\n\n            if (s.length) {\n                g += ` \\u26a0 ${s.length} erreur(s) \\u2014 voir console.`;\n                console.error(\"Erreurs HAL Coll Checker :\", s);\n            }\n\n            t.textContent = g;\n        });\n})();", "collcheck_mini": "javascript:(function(){if(document.getElementById(\"_halCollChecker\"))return;const e=document.createElement(\"div\");e.id=\"_halCollChecker\";e.style.cssText=\"position:fixed;top:20px;right:20px;z-index:99999;background:#fff;border:1px solid #ccc;border-radius:6px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.2);font:13px sans-serif;min-width:280px\";e.innerHTML=`<b>V\\u00e9rificateur de collection HAL</b><button onclick=\"document.getElementById('_halCollChecker').remove()\" style=\"float:right;border:none;background:none;cursor:pointer;font-size:15px\">\\u2715</button><br><br><label>Code collection : <input id=\"_halCollCode\" type=\"text\" placeholder=\"ex: UNIV-PARIS1\" style=\"width:100%;margin-top:4px;padding:4px;box-sizing:border-box\"></label><br><br><button id=\"_halCollRun\" style=\"padding:5px 12px;cursor:pointer\">V\\u00e9rifier</button><span id=\"_halCollStatus\" style=\"margin-left:8px;color:#888\"></span>`;document.body.appendChild(e);document.getElementById(\"_halCollRun\").addEventListener(\"click\",async function(){const e=document.getElementById(\"_halCollCode\").value.trim(),t=document.getElementById(\"_halCollStatus\");if(!e){alert(\"Saisis un code de collection.\");return}document.querySelectorAll(\"._halBadge\").forEach(e=>e.remove());document.querySelectorAll(\"tr[data-docid]\").forEach(e=>e.style.background=\"\");const l=document.querySelectorAll(\"tr[data-docid]\");if(!l.length){alert(\"Aucun document trouv\\u00e9 dans le DOM. Essaie de d\\u00e9plier la liste d'abord.\");return}const o=[...l].map(e=>e.dataset.docid),r=80,d=[];for(let e=0;e<o.length;e+=r)d.push(o.slice(e,e+r));const n=new Set,s=[];for(let a=0;a<d.length;a++){const c=d[a];t.textContent=d.length>1?`Lot ${a+1}/${d.length} (${o.length} docs au total)\\u2026`:`Interrogation de l'API (${o.length} docs)\\u2026`;const i=`collCode_s:${e} AND (docid:${c.join(\" OR docid:\")})`,u=`https://api.archives-ouvertes.fr/search/?q=${encodeURIComponent(i)}&fl=docid&rows=${c.length}&wt=json`;try{const e=await fetch(u);if(!e.ok){s.push(`Lot ${a+1} : HTTP ${e.status} ${e.statusText}`);continue}const t=await e.json();if(!t||!t.response||!Array.isArray(t.response.docs)){s.push(`Lot ${a+1} : r\\u00e9ponse JSON inattendue`);continue}t.response.docs.forEach(e=>n.add(String(e.docid)))}catch(e){s.push(`Lot ${a+1} : ${e.message||e}`)}}let m=0;l.forEach(t=>{const l=t.querySelectorAll(\"td\")[1];if(l&&n.has(t.dataset.docid)){t.style.background=\"#e6f4ea\";const o=document.createElement(\"span\");o.className=\"_halBadge\",o.textContent=\"\\u2713 \"+e,o.style.cssText=\"display:inline-block;margin-left:6px;padding:1px 6px;background:#2e7d32;color:#fff;border-radius:3px;font-size:11px;vertical-align:middle\",l.appendChild(o),m++}});let g=`${m} doc${m>1?\"s\":\"\"} trouv\\u00e9${m>1?\"s\":\"\"} sur ${o.length}.`;s.length&&(g+=` \\u26a0 ${s.length} erreur(s) \\u2014 voir console.`,console.error(\"Erreurs HAL Coll Checker :\",s));t.textContent=g})})();"}
+</script>
+
+<script>
+(function(){
+  const data = JSON.parse(document.getElementById('data').textContent);
+
+  const map = {
+    duplicate:  {full:'duplicate_full',  mini:'duplicate_mini',  code:'code-duplicate'},
+    idcatcher:  {full:'idcatcher_full',  mini:'idcatcher_mini',  code:'code-idcatcher'},
+    jsonifier:  {full:'jsonifier_full',  mini:'jsonifier_mini',  code:'code-jsonifier'},
+    collcheck:  {full:'collcheck_full',  mini:'collcheck_mini',  code:'code-collcheck'},
+  };
+
+  function ensureJsPrefix(s){
+    return s.trim().startsWith('javascript:') ? s.trim() : 'javascript:' + s.trim();
+  }
+
+  Object.keys(map).forEach(function(key){
+    const entry = map[key];
+    const fullCode = data[entry.full];
+    const miniCode = ensureJsPrefix(data[entry.mini]);
+
+    // Fill readable code block
+    document.getElementById(entry.code).textContent = fullCode;
+
+    // Wire big install button
+    const btn = document.getElementById('install-' + key);
+    btn.setAttribute('href', miniCode);
+
+    // Wire mini bookmarks-bar chip
+    const bar = document.getElementById('bar-' + key);
+    if (bar) bar.setAttribute('href', miniCode);
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const targetId = btn.getAttribute('data-copy-target');
+      const text = document.getElementById(targetId).textContent;
+      navigator.clipboard.writeText(text).then(function(){
+        const original = btn.textContent;
+        btn.textContent = 'Copié ✓';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
