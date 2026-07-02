@@ -232,10 +232,55 @@
     transition:background .15s ease, transform .12s ease;
     cursor:grab;
   }
+  .install-group{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:6px;
+    flex-shrink:0;
+  }
+  .install-hint{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:#8a8168;
+    white-space:nowrap;
+  }
   .install-btn:hover{background:var(--brass-dark);border-color:var(--brass-dark);transform:translateY(-1px);}
   .install-btn:active{cursor:grabbing;}
 
   .tool-body{padding:20px 28px 26px;}
+
+  .reveal{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:none;
+    border:1px dashed var(--line);
+    border-radius:7px;
+    padding:9px 14px;
+    width:100%;
+    font-family:var(--mono);
+    font-size:12px;
+    color:#5c6b78;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .reveal:hover{border-color:var(--brass);color:var(--brass-dark);}
+  .reveal .chevron{
+    transition:transform .18s ease;
+    font-size:10px;
+  }
+  .reveal[aria-expanded="true"] .chevron{transform:rotate(90deg);}
+
+  .code-panel{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .22s ease;
+  }
+  .code-panel.open{grid-template-rows:1fr;}
+  .code-panel > div{overflow:hidden;}
+  .code-panel-inner{padding-top:14px;}
+
   .code-wrap{
     position:relative;
     background:#11202a;
@@ -246,15 +291,41 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:8px 14px;
+    padding:6px 8px 6px 14px;
     background:#0d1922;
     border-bottom:1px solid #1c2f3b;
+    gap:10px;
   }
-  .code-bar span{
+  .code-tabs{
+    display:flex;
+    gap:2px;
+  }
+  .code-tab{
     font-family:var(--mono);
     font-size:11px;
-    color:#7a9a97;
-    letter-spacing:.06em;
+    letter-spacing:.02em;
+    background:transparent;
+    border:1px solid transparent;
+    color:#6f8b88;
+    padding:6px 10px;
+    border-radius:5px 5px 0 0;
+    cursor:pointer;
+  }
+  .code-tab.active{
+    color:#f4f1e8;
+    background:#11202a;
+    border-color:#1c2f3b;
+    border-bottom-color:#11202a;
+  }
+  .code-tab .pill{
+    font-size:9px;
+    background:var(--brass);
+    color:#11202a;
+    padding:1px 5px;
+    border-radius:8px;
+    margin-left:6px;
+    font-weight:600;
+    vertical-align:middle;
   }
   .copy-btn{
     font-family:var(--mono);
@@ -266,9 +337,13 @@
     border-radius:5px;
     cursor:pointer;
     transition:background .15s ease, border-color .15s ease;
+    flex-shrink:0;
   }
   .copy-btn:hover{background:#1c2f3b;border-color:var(--brass);}
   .copy-btn.copied{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  .code-view{display:none;}
+  .code-view.active{display:block;}
 
   pre{
     margin:0;
@@ -284,6 +359,8 @@
     color:#dce8e6;
     white-space:pre;
   }
+  .code-view[data-kind="mini"] pre,
+  .code-view[data-kind="mini"] code{white-space:pre-wrap;word-break:break-all;}
   pre::-webkit-scrollbar{height:8px;width:8px;}
   pre::-webkit-scrollbar-thumb{background:#2b4753;border-radius:4px;}
 
@@ -350,13 +427,29 @@
         <h2>Détecteur de doublons</h2>
         <p>Depuis une page de notice ou de modération HAL, interroge l'API pour repérer les notices au DOI ou au titre proche — avec liens directs vers les doublons potentiels.</p>
       </div>
-      <a class="install-btn" id="install-duplicate" draggable="true">↗ Glisser pour installer</a>
+      <div class="install-group"><span class="install-hint">↖ glisser dans les favoris</span><a class="install-btn" id="install-duplicate" draggable="true">Détecteur de doublons</a></div>
     </div>
     <div class="tool-body">
+      <button class="reveal" type="button" aria-expanded="false" data-reveal-target="panel-duplicate">
+        <span class="chevron">▶</span> Afficher le code
+      </button>
+      <div class="code-panel" id="panel-duplicate"><div><div class="code-panel-inner">
       <div class="code-wrap">
-        <div class="code-bar"><span>Duplicate.js — version lisible</span><button class="copy-btn" data-copy-target="code-duplicate">Copier</button></div>
-        <pre><code id="code-duplicate"></code></pre>
+        <div class="code-bar">
+          <div class="code-tabs">
+            <button class="code-tab active" data-view="mini-duplicate">Copier-coller <span class="pill">favori</span></button>
+            <button class="code-tab" data-view="full-duplicate">Lisible</button>
+          </div>
+          <button class="copy-btn" data-copy-active="duplicate">Copier</button>
+        </div>
+        <div class="code-view active" data-kind="mini" id="mini-duplicate">
+          <pre><code id="code-mini-duplicate"></code></pre>
+        </div>
+        <div class="code-view" data-kind="full" id="full-duplicate">
+          <pre><code id="code-full-duplicate"></code></pre>
+        </div>
       </div>
+      </div></div></div>
     </div>
   </section>
 
@@ -368,13 +461,29 @@
         <h2>Id_Catcher</h2>
         <p>Sur une page auteur AuréHAL, retrouve automatiquement le prénom et le nom, puis croise IdRef et ORCID pour proposer les identifiants et affiliations correspondants, copiables en un clic.</p>
       </div>
-      <a class="install-btn" id="install-idcatcher" draggable="true">↗ Glisser pour installer</a>
+      <div class="install-group"><span class="install-hint">↖ glisser dans les favoris</span><a class="install-btn" id="install-idcatcher" draggable="true">Id_Catcher</a></div>
     </div>
     <div class="tool-body">
+      <button class="reveal" type="button" aria-expanded="false" data-reveal-target="panel-idcatcher">
+        <span class="chevron">▶</span> Afficher le code
+      </button>
+      <div class="code-panel" id="panel-idcatcher"><div><div class="code-panel-inner">
       <div class="code-wrap">
-        <div class="code-bar"><span>Id_Catcher.js — version lisible</span><button class="copy-btn" data-copy-target="code-idcatcher">Copier</button></div>
-        <pre><code id="code-idcatcher"></code></pre>
+        <div class="code-bar">
+          <div class="code-tabs">
+            <button class="code-tab active" data-view="mini-idcatcher">Copier-coller <span class="pill">favori</span></button>
+            <button class="code-tab" data-view="full-idcatcher">Lisible</button>
+          </div>
+          <button class="copy-btn" data-copy-active="idcatcher">Copier</button>
+        </div>
+        <div class="code-view active" data-kind="mini" id="mini-idcatcher">
+          <pre><code id="code-mini-idcatcher"></code></pre>
+        </div>
+        <div class="code-view" data-kind="full" id="full-idcatcher">
+          <pre><code id="code-full-idcatcher"></code></pre>
+        </div>
       </div>
+      </div></div></div>
     </div>
   </section>
 
@@ -386,13 +495,29 @@
         <h2>Jsonifier</h2>
         <p>Ouvre dans un nouvel onglet la réponse JSON complète de l'API HAL pour la notice affichée — utile pour inspecter tous les champs sans repasser par une requête manuelle.</p>
       </div>
-      <a class="install-btn" id="install-jsonifier" draggable="true">↗ Glisser pour installer</a>
+      <div class="install-group"><span class="install-hint">↖ glisser dans les favoris</span><a class="install-btn" id="install-jsonifier" draggable="true">Jsonifier</a></div>
     </div>
     <div class="tool-body">
+      <button class="reveal" type="button" aria-expanded="false" data-reveal-target="panel-jsonifier">
+        <span class="chevron">▶</span> Afficher le code
+      </button>
+      <div class="code-panel" id="panel-jsonifier"><div><div class="code-panel-inner">
       <div class="code-wrap">
-        <div class="code-bar"><span>Jsonifier.js — version lisible</span><button class="copy-btn" data-copy-target="code-jsonifier">Copier</button></div>
-        <pre><code id="code-jsonifier"></code></pre>
+        <div class="code-bar">
+          <div class="code-tabs">
+            <button class="code-tab active" data-view="mini-jsonifier">Copier-coller <span class="pill">favori</span></button>
+            <button class="code-tab" data-view="full-jsonifier">Lisible</button>
+          </div>
+          <button class="copy-btn" data-copy-active="jsonifier">Copier</button>
+        </div>
+        <div class="code-view active" data-kind="mini" id="mini-jsonifier">
+          <pre><code id="code-mini-jsonifier"></code></pre>
+        </div>
+        <div class="code-view" data-kind="full" id="full-jsonifier">
+          <pre><code id="code-full-jsonifier"></code></pre>
+        </div>
       </div>
+      </div></div></div>
     </div>
   </section>
 
@@ -404,13 +529,29 @@
         <h2>CollCheck</h2>
         <p>Sur une liste de dépôts, saisissez un code de collection : l'outil interroge l'API par lots et surligne directement dans le tableau les documents déjà présents dans la collection.</p>
       </div>
-      <a class="install-btn" id="install-collcheck" draggable="true">↗ Glisser pour installer</a>
+      <div class="install-group"><span class="install-hint">↖ glisser dans les favoris</span><a class="install-btn" id="install-collcheck" draggable="true">CollCheck</a></div>
     </div>
     <div class="tool-body">
+      <button class="reveal" type="button" aria-expanded="false" data-reveal-target="panel-collcheck">
+        <span class="chevron">▶</span> Afficher le code
+      </button>
+      <div class="code-panel" id="panel-collcheck"><div><div class="code-panel-inner">
       <div class="code-wrap">
-        <div class="code-bar"><span>CollCheck.js — version lisible</span><button class="copy-btn" data-copy-target="code-collcheck">Copier</button></div>
-        <pre><code id="code-collcheck"></code></pre>
+        <div class="code-bar">
+          <div class="code-tabs">
+            <button class="code-tab active" data-view="mini-collcheck">Copier-coller <span class="pill">favori</span></button>
+            <button class="code-tab" data-view="full-collcheck">Lisible</button>
+          </div>
+          <button class="copy-btn" data-copy-active="collcheck">Copier</button>
+        </div>
+        <div class="code-view active" data-kind="mini" id="mini-collcheck">
+          <pre><code id="code-mini-collcheck"></code></pre>
+        </div>
+        <div class="code-view" data-kind="full" id="full-collcheck">
+          <pre><code id="code-full-collcheck"></code></pre>
+        </div>
       </div>
+      </div></div></div>
     </div>
   </section>
 
@@ -439,13 +580,17 @@
     return s.trim().startsWith('javascript:') ? s.trim() : 'javascript:' + s.trim();
   }
 
+  const activeView = {}; // key -> 'mini' | 'full'
+
   Object.keys(map).forEach(function(key){
     const entry = map[key];
     const fullCode = data[entry.full];
     const miniCode = ensureJsPrefix(data[entry.mini]);
 
-    // Fill readable code block
-    document.getElementById(entry.code).textContent = fullCode;
+    // Fill both code views
+    document.getElementById('code-mini-' + key).textContent = miniCode;
+    document.getElementById('code-full-' + key).textContent = fullCode;
+    activeView[key] = 'mini';
 
     // Wire big install button
     const btn = document.getElementById('install-' + key);
@@ -456,11 +601,50 @@
     if (bar) bar.setAttribute('href', miniCode);
   });
 
-  // Copy buttons
+  // Reveal / collapse panels
+  document.querySelectorAll('.reveal').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const panel = document.getElementById(btn.getAttribute('data-reveal-target'));
+      const isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      btn.querySelector('.chevron');
+      btn.lastChild.textContent = isOpen ? ' Masquer le code' : ' Afficher le code';
+    });
+  });
+
+  // Tabs: mini vs lisible
+  document.querySelectorAll('.code-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      const viewId = tab.getAttribute('data-view'); // e.g. mini-duplicate
+      const kind = viewId.split('-')[0];             // mini | full
+      const key = viewId.slice(kind.length + 1);      // duplicate
+
+      activeView[key] = kind;
+
+      // toggle tab active state within this tab group
+      const tabBar = tab.closest('.code-tabs');
+      tabBar.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // toggle view visibility within this code-wrap
+      const wrap = tab.closest('.code-wrap');
+      wrap.querySelectorAll('.code-view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+    });
+  });
+
+  // Copy buttons (readable-code blocks + active-tab copy buttons)
   document.querySelectorAll('.copy-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
-      const targetId = btn.getAttribute('data-copy-target');
-      const text = document.getElementById(targetId).textContent;
+      let text;
+      if (btn.hasAttribute('data-copy-active')){
+        const key = btn.getAttribute('data-copy-active');
+        const kind = activeView[key] || 'mini';
+        text = document.getElementById('code-' + kind + '-' + key).textContent;
+      } else {
+        const targetId = btn.getAttribute('data-copy-target');
+        text = document.getElementById(targetId).textContent;
+      }
       navigator.clipboard.writeText(text).then(function(){
         const original = btn.textContent;
         btn.textContent = 'Copié ✓';
