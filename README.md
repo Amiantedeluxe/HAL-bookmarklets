@@ -48,4 +48,12 @@ A exécuter sur l'onglet "Liste des documents" depuis une page auteur AuréHAL e
 	2. Fait une requête API HAL sur les dépôts présents dans la liste pour vérifier s'ils appartiennent à la collection concernée
 	3. Les dépôts appartenant à la collection sont surlignés en vert
 
+<img width="1500" height="773" alt="Capture d&#39;écran 2026-09-01 105012" src="https://github.com/user-attachments/assets/bb97ca6b-cb74-4f89-92e1-bafba041340a" />
 
+## Script Jsonfier (Jsonfier.js)
+
+A exécuter depuis une page de dépôt HAL pour accéder à la notice au format json (https://api.archives-ouvertes.fr/search?q=docid:XXXXXXX&fl=*&wt=json)
+
+### Fonctionnement :
+
+	1. Le script récupère le docid et construit l'URL de la notice au format json, puis l'ouvre
