@@ -1,6 +1,6 @@
 # Liste de bookmarklets HAL
 
-Ce dépôt contient une liste de bookmarklets utilisables sur HAL et AuréHAL, pour simplifier et gagner du temps sur certaines tâches.
+Ce dépôt contient une liste de bookmarklets utilisables sur HAL et AuréHAL, pour simplifier et gagner du temps sur certaines tâches. Les scripts AuréHAL nécessitent des droits d'administrateur de portail.
 Chaque script contient une version indentée et une version 'mini' à copier-coller. 
 
 ## Qu'est-ce qu'un bookmarklet ?
@@ -13,7 +13,7 @@ Un bookmarklet est un petit programme Javascript stocké dans un favori de navig
 	3. Dans la case “URL”, coller le script puis enregistrer
 	4. Une fois sur la page HAL ou AuréHAL, cliquer sur le favori pour exécuter le script
 
-## Script doublon (Duplicate.js) 
+## Script détection de doublon (Duplicate.js) 
 
 A exécuter depuis une page de dépôt HAL pour repérer d'éventuels doublons
 
@@ -26,7 +26,7 @@ A exécuter depuis une page de dépôt HAL pour repérer d'éventuels doublons
 
 <img width="1092" height="435" alt="Capture d&#39;écran 2025-11-28 103045" src="https://github.com/user-attachments/assets/32b8e174-fca6-4ff6-9609-d9e41edca859" />
 
-## Script AuréHAL (Id_Catcher.js)
+## Script ID Catcher (Id_Catcher.js)
 
 A exécuter depuis une page auteur AuréHAL pour récupérer des identifiants sur IdRef et ORCID.
 
@@ -38,5 +38,14 @@ A exécuter depuis une page auteur AuréHAL pour récupérer des identifiants su
 
 <img width="1522" height="848" alt="Capture d&#39;écran 2026-02-05 183627" src="https://github.com/user-attachments/assets/803afe4e-c998-4603-b5ea-26717f043a51" />
 
+## Script CollectionChecker (CollCheck.js)
+
+A exécuter sur l'onglet "Liste des documents" depuis une page auteur AuréHAL en cours de modification pour pour visualiser rapidement si les dépôts appartiennent ou non à une collection. Utile pour répartir les dépôts entre auteurs homonymes. Après l'exécution du script, entrer le code collection et cliquer sur "Vérifier".
+
+### Fonctionnement :
+
+	1. Le script ouvre une pop-up contenant une boite dans laquelle taper le nom de la collection recherchée
+	2. Fait une requête API HAL sur les dépôts présents dans la liste pour vérifier s'ils appartiennent à la collection concernée
+	3. Les dépôts appartenant à la collection sont surlignés en vert
 
 
