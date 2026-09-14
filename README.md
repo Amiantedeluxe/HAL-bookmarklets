@@ -13,6 +13,8 @@ Un bookmarklet est un petit programme Javascript stocké dans un favori de navig
 	3. Dans la case “URL”, coller le script puis enregistrer
 	4. Une fois sur la page HAL ou AuréHAL, cliquer sur le favori pour exécuter le script
 
+-------------------------------------
+
 ## Script détection de doublon (Duplicate.js) 
 
 A exécuter depuis une page de dépôt HAL pour repérer d'éventuels doublons
@@ -49,6 +51,18 @@ A exécuter sur l'onglet "Liste des documents" depuis une page auteur AuréHAL e
 	3. Les dépôts appartenant à la collection sont surlignés en vert
 
 <img width="1500" height="773" alt="Capture d&#39;écran 2026-09-01 105012" src="https://github.com/user-attachments/assets/bb97ca6b-cb74-4f89-92e1-bafba041340a" />
+
+## Script Doi Finder (Doi_Finder.js)
+
+A exécuter sur une notice sans doi pour repérer si la publication possède un doi référencé dans la base Crossref.
+
+### Fonctionnement :
+
+	1. Le script récupère les titre, noms d'auteurs et nom de revue de la notice ouverte
+	2. Fait une requête Crossref à partir du titre, avec en fallback une requête sur les autres notices HAL mentionnant la même revue
+	3. Affiche une pop-up contenant les résultats les plus proches avec calcul d'un score de probabilité (70% coefficient de Dice sur les tokens du titre, 30% taux de correspondance des noms de famille des auteurs)
+
+<img width="1342" height="595" alt="image" src="https://github.com/user-attachments/assets/47e869fc-3429-4f90-b55d-2bc07e29847e" />
 
 ## Script Jsonfier (Jsonfier.js)
 
