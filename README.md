@@ -64,6 +64,21 @@ A exécuter sur une notice sans doi pour repérer si la publication possède un 
 
 <img width="1342" height="595" alt="image" src="https://github.com/user-attachments/assets/47e869fc-3429-4f90-b55d-2bc07e29847e" />
 
+## Script Journal Info (Journal_Info.js)
+
+A exécuter depuis une page de modification de revue du référentiel "Revue" d'AuréHAL pour retrouver la revue dans la base Mir@bel et compléter automatiquement ses métadonnées (ISSN, EISSN, éditeur, URL).
+
+### Fonctionnement :
+
+	1. Le script récupère le nom de la revue et, s'il est renseigné, l'ISSN depuis le formulaire AuréHAL
+	2. Fait une requête sur l'API Mir@bel, d'abord sur l'ISSN puis sur le titre
+	3. Affiche les candidats dans une popup, triés par score de similarité (coefficient de Dice sur le titre), avec leur ISSN, EISSN, éditeur, dates de parution et lien vers la fiche Mir@bel
+	4. Un clic sur "Remplir" complète les champs du formulaire (ISSN, EISSN, éditeur, URL). Les champs remplis sont entourés en vert. Par défaut, les champs déjà renseignés ne sont pas modifiés : cocher "Écraser les champs déjà remplis" pour les remplacer
+
+Le script ne valide pas le formulaire : il reste à vérifier les valeurs puis à cliquer sur "Modifier". Les données proviennent de [Mir@bel](https://reseau-mirabel.info) (Licence ouverte Etalab).
+
+<img width="1229" height="622" alt="image" src="https://github.com/user-attachments/assets/2a389635-e4f8-4093-ad45-ccf5e859101e" />
+
 ## Script Jsonfier (Jsonfier.js)
 
 A exécuter depuis une page de dépôt HAL pour accéder à la notice au format json (https://api.archives-ouvertes.fr/search?q=docid:XXXXXXX&fl=*&wt=json)
